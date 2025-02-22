@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="{% static "style.css" %}">
+
+</head>
+<body>
+    <div class="todo-container">
+        <h2>To-Do List</h2>
+        <input type="text" id="taskInput" placeholder="Add a new task...">
+        <input type="date" id="dueDateInput">
+        <br>
+        <br>
+        <button onclick="addTask()">Add</button>
+        <ul id="taskList">
+            {% for t in todos %}
+                {% if t.checked is True %}
+                    <li class=""><input type="checkbox" class="check" onclick="toggleTask(this)" checked> {{ t.name }} (Due: {{ t.due_date }} )</li>
+                {% else %}
+                    <li class=""><input type="checkbox" class="check" onclick="toggleTask(this)"> {{ t.name }} (Due: {{ t.due_date }} )</li>
+                {% endif %}
+
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script src="{% static 'script.js' %}">
+    </script>
+</body>
+</html>

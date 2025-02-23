@@ -24,13 +24,23 @@
         <ul id="taskList">
             {% for t in todos %}
                 {% if t.checked is True %}
-                    <li class="">
-                        <input type="checkbox" class="check" onclick="toggleTask(this)" checked> {{ t.name }} (Due: {{ t.due_date }} )
-                    </li>
+                    <form action="." method="post">
+                        <a class="completed" href="{{ t.get_url }}">
+                            <input type="checkbox" class="check" onclick="toggleTask(this)" checked disabled>{{ t.id }} -  {{ t.name }} -  (Due: {{ t.due_date }} )
+                         </a>
+                        <a href="{{ t.get_url_delete }}" style="color: darkred">
+                            delete
+                        </a>
+                    </form>
                 {% else %}
-                    <li class="">
-                        <input type="checkbox" class="check" onclick="toggleTask(this)"> {{ t.name }} (Due: {{ t.due_date }} )
-                    </li>
+                    <form action="." method="post">
+                        <a class="" href="{{ t.get_url }}">
+                            <input type="checkbox" class="check" onclick="toggleTask(this)" disabled>{{ t.id }} -  {{ t.name }} -  (Due: {{ t.due_date }} )
+                        </a>
+                        <a href="{{ t.get_url_delete }}" style="color: darkred">
+                            delete
+                        </a>
+                    </form>
                 {% endif %}
 
             {% endfor %}

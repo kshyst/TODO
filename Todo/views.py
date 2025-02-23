@@ -24,10 +24,17 @@ def todo_index(request):
 
 def update_todo(request , id):
 
+    todo = Todo.objects.get(id = id)
+
     context = {
         'id' : id,
-        'form' : UpdateTaskForm()
+        'form' : UpdateTaskForm(),
+        'name' : todo.name,
+        'date' : todo.due_date,
+        'checked' : todo.checked
     }
+
+    print(todo.checked)
 
     if request.method == "POST" :
 
@@ -36,6 +43,8 @@ def update_todo(request , id):
         if form.is_valid():
             form.update(id)
             return redirect('/')
+        else:
+            print(form)
 
     return render(request , 'update.html' , context=context)
 

@@ -7,9 +7,13 @@
 <body>
     <form method="post" action=".">
         {% csrf_token %}
-        {{ form.name }}
-        {{ form.due_date }}
-        {{ form.checked }}
+        <input id="id_name" type="text" name="name" value="{{ name }}" />
+        <input id="id_due_date" type="date" name="due_date" value="{{ date }}"/>
+        {% if checked %}
+            <input id="id_checked" type="checkbox" name="checked" checked />
+        {% else %}
+            <input id="id_checked" type="checkbox" name="checked" />
+        {% endif %}
         <input type="submit" value="Update">
     </form>
 </body>

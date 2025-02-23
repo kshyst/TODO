@@ -28,20 +28,11 @@ class UpdateTaskForm(forms.ModelForm):
         model = Todo
         fields = ['name' , 'due_date' , 'checked']
 
-    name = forms.CharField(max_length=128 , widget=forms.TextInput(attrs={
-        'type' : 'text',
-        'id' : 'taskInput',
-        'placeholder' : "Update task"
-    }))
+    name = forms.CharField(max_length=128 )
 
-    due_date = forms.DateField(widget=forms.TextInput(attrs={
-        'type' : 'date',
-        'id' : 'dueDateInput'
-    }))
+    due_date = forms.DateField()
 
     checked = forms.CheckboxInput()
-
-    deleter = forms.CheckboxInput()
 
     def update(self , id):
         todo = Todo.objects.get(id = id)
@@ -50,6 +41,7 @@ class UpdateTaskForm(forms.ModelForm):
         todo.due_date = self.cleaned_data['due_date']
 
         todo.save()
+
     @staticmethod
     def delete_entity(id):
         Todo.objects.get(id).delete()

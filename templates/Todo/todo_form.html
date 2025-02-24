@@ -1,0 +1,6 @@
+<form method="post" action=".">
+    {% csrf_token %}
+    {{ form.name }}
+    {{ form.due_date }}
+    <input type="submit" value="Create">
+</form>

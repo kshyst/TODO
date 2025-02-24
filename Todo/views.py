@@ -8,7 +8,7 @@ from Todo.models import Todo
 
 # Create your views here.
 
-def todo_index(request):
+def todo_home(request):
     context = {
         "todos" : Todo.objects.all(),
         "form" : TaskForm(),
@@ -22,10 +22,11 @@ def update_todo(request , id):
 
     context = {
         'id' : id,
-        'form' : TaskForm(),
-        'name' : todo.name,
-        'date' : todo.due_date,
-        'checked' : todo.checked
+        'form' : TaskForm(initial={
+            'name' : todo.name,
+            'due_date' : todo.due_date,
+            'checked' : todo.checked
+        }),
     }
 
     if request.method == "POST" :
@@ -35,6 +36,8 @@ def update_todo(request , id):
         if form.is_valid():
             form.save()
             return redirect("home_todo")
+        else:
+            return render(request, 'update.html', context={"form": form})
 
     return render(request , 'update.html' , context=context)
 
@@ -52,5 +55,8 @@ def create_todo(request):
         if form.is_valid():
             form.save()
             return redirect("home_todo")
+        else:
+            return render(request, 'create.html', context={"form":form})
+
 
     return render(request , 'create.html' , context=context)

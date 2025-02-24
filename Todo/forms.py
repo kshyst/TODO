@@ -20,4 +20,6 @@ class TaskForm(forms.ModelForm):
         'id' : 'dueDateInput',
     }))
 
-    checked = forms.CharField(widget=forms.CheckboxInput())
+    checked = forms.BooleanField(required=False , widget=forms.TextInput(attrs={
+        'type' : 'checkbox',
+    }))

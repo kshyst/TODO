@@ -7,9 +7,24 @@
 <body>
     <form method="post" action=".">
         {% csrf_token %}
-        {{ form.name }}
-        {{ form.due_date }}
+        {% for f in form %}
+            {{ f.errors }}
+            {{ f.label_tag }} {{ f }}
+        {% endfor %}
+
+{#        {% if form.errors %}#}
+{#            <p style="color: red;">There are errors in your form:</p>#}
+{#            <ul>#}
+{#                {% for field, errors in form.errors.items %}#}
+{#                    {% for error in errors %}#}
+{#                        <li style="color: red;">{{ field }}: {{ error }}</li>#}
+{#                    {% endfor %}#}
+{#                {% endfor %}#}
+{#            </ul>#}
+{#        {% endif %}#}
+
         <input type="submit" value="Create">
+
     </form>
 </body>
 </html>

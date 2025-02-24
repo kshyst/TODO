@@ -12,7 +12,7 @@
 <body>
     <div class="todo-container">
         <h2>To-Do List</h2>
-            <a href="create/">Add</a>
+            <a href="{% url 'create_todo' %}">Add</a>
         <ul id="taskList">
             {% for t in todos %}
                 {% if t.checked is True %}
@@ -20,16 +20,16 @@
                         <a class="completed" href="{{ t.get_url }}">
                             <input type="checkbox" class="check" checked disabled>{{ t.id }} -  {{ t.name }} -  (Due: {{ t.due_date }} )
                          </a>
-                        <a href="{{ t.get_url_delete }}" style="color: darkred">
+                        <a href="{% url 'delete_todo' t.id %}" style="color: darkred">
                             delete
                         </a>
                     </form>
                 {% else %}
                     <form action="." method="post">
-                        <a class="" href="{{ t.get_url }}">
+                        <a href="{% url 'update_todo' t.id %}">
                             <input type="checkbox" class="check" disabled>{{ t.id }} -  {{ t.name }} -  (Due: {{ t.due_date }} )
                         </a>
-                        <a href="{{ t.get_url_delete }}" style="color: darkred">
+                        <a href="{% url 'update_todo' t.id %}" style="color: darkred">
                             delete
                         </a>
                     </form>

@@ -9,7 +9,7 @@ from Todo.models import Todo
 def todo_index(request):
     context = {
         "todos" : Todo.objects.all(),
-        "form" : TaskForm()
+        "form" : TaskForm(),
     }
 
     return render(request , 'index.html' , context=context)

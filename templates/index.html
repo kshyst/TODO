@@ -12,21 +12,13 @@
 <body>
     <div class="todo-container">
         <h2>To-Do List</h2>
-        <form action="." method="post">
-            {% csrf_token %}
-
-            {{ form.name }}
-            {{ form.due_date }}
-            <br>
-            <br>
-            <button type="submit">Add</button>
-        </form>
+            <a href="create/">Add</a>
         <ul id="taskList">
             {% for t in todos %}
                 {% if t.checked is True %}
                     <form action="." method="post">
                         <a class="completed" href="{{ t.get_url }}">
-                            <input type="checkbox" class="check" onclick="toggleTask(this)" checked disabled>{{ t.id }} -  {{ t.name }} -  (Due: {{ t.due_date }} )
+                            <input type="checkbox" class="check" checked disabled>{{ t.id }} -  {{ t.name }} -  (Due: {{ t.due_date }} )
                          </a>
                         <a href="{{ t.get_url_delete }}" style="color: darkred">
                             delete
@@ -35,7 +27,7 @@
                 {% else %}
                     <form action="." method="post">
                         <a class="" href="{{ t.get_url }}">
-                            <input type="checkbox" class="check" onclick="toggleTask(this)" disabled>{{ t.id }} -  {{ t.name }} -  (Due: {{ t.due_date }} )
+                            <input type="checkbox" class="check" disabled>{{ t.id }} -  {{ t.name }} -  (Due: {{ t.due_date }} )
                         </a>
                         <a href="{{ t.get_url_delete }}" style="color: darkred">
                             delete

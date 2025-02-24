@@ -1,3 +1,5 @@
+{% load form_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,12 +9,27 @@
 <body>
     <form method="post" action=".">
         {% csrf_token %}
-        <input id="id_name" type="text" name="name" value="{{ name }}" />
-        <input id="id_due_date" type="date" name="due_date" value="{{ date }}"/>
+{#        <input id="id_name" type="text" name="name" value="{{ name }}" />#}
+{#        <input id="id_due_date" type="date" name="due_date" value="{{ date }}"/>#}
+{#        {% if checked %}#}
+{#            <input id="id_checked" type="checkbox" name="checked" checked />#}
+{#        {% else %}#}
+{#            <input id="id_checked" type="checkbox" name="checked" />#}
+{#        {% endif %}#}
+{#        <input type="submit" value="Update">#}
+
+        {% with value="value:"|add:name %}
+            {{ form.name|attr:value }}
+        {% endwith %}
+
+        {{ form.due_date }}
+
         {% if checked %}
-            <input id="id_checked" type="checkbox" name="checked" checked />
+            {% with value="checked:" %}
+                {{ form.checked|attr:value }}
+            {% endwith %}
         {% else %}
-            <input id="id_checked" type="checkbox" name="checked" />
+            {{ form.checked }}
         {% endif %}
         <input type="submit" value="Update">
     </form>

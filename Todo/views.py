@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
-from Todo.forms import AddTaskForm, UpdateTaskForm
+from Todo.forms import TaskForm
 from Todo.models import Todo
 
 
@@ -9,47 +9,46 @@ from Todo.models import Todo
 def todo_index(request):
     context = {
         "todos" : Todo.objects.all(),
-        "form" : AddTaskForm()
+        "form" : TaskForm()
     }
-
-    if request.method == "POST" :
-        form = AddTaskForm(request.POST)
-
-        if form.is_valid():
-            form.save()
-
-        return redirect('/')
 
     return render(request , 'index.html' , context=context)
 
 def update_todo(request , id):
 
-    todo = Todo.objects.get(id = id)
+    todo = get_object_or_404(Todo , id=id)
 
     context = {
         'id' : id,
-        'form' : UpdateTaskForm(),
+        'form' : TaskForm(),
         'name' : todo.name,
         'date' : todo.due_date,
         'checked' : todo.checked
     }
 
-    print(todo.checked)
-
     if request.method == "POST" :
 
-        form = UpdateTaskForm(request.POST)
+        form = TaskForm(request.POST , instance=todo)
 
         if form.is_valid():
-            form.update(id)
-            return redirect('/')
-        else:
-            print(form)
+            form.save()
+            return redirect("home_todo")
 
     return render(request , 'update.html' , context=context)
 
 def delete_todo(request , id):
-    if Todo.objects.get(id = id) is not None:
-        Todo.objects.get(id=id).delete()
+    obj = Todo.objects.get(id = id)
+    if obj:
+        obj.delete()
+    return redirect("home_todo")
 
-    return redirect('/')
+def create_todo(request):
+    context = {'form' : TaskForm()}
+
+    if request.method == "POST" :
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("home_todo")
+
+    return render(request , 'create.html' , context=context)

@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'Todo.apps.TodoConfig'
+    'Todo.apps.TodoConfig',
+    'Todo.templatetags.form_filters',
 ]
 
 MIDDLEWARE = [

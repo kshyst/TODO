@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Retrieve</title>
+</head>
+    <body>
+        <a href="{% url 'create_todo' %}">Create</a>
+        <table>
+            {% for object in object_list %}
+                <tr>
+                    <th><a href="{% url 'update_todo' object.id %}">{{ object.name }}</a></th>
+                    <th>{{ object.due_date }}</th>
+                    <th>{{ object.checked }}</th>
+                    <th><a href="{% url 'delete_todo' object.id %}" style="color: red">Delete</a></th>
+                </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

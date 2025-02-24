@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView, DeleteView
 
 from Todo.forms import TaskForm
 from Todo.models import Todo
@@ -17,6 +17,9 @@ class TodoIndex(View):
             "todos" : Todo.objects.all(),
             "form" : TaskForm(),
         })
+
+class RetrieveTodo(ListView):
+    model = Todo
 
 def update_todo(request , id):
 
@@ -46,7 +49,11 @@ def delete_todo(request , id):
         obj.delete()
     return redirect("home_todo")
 
+class DeleteTodo(DeleteView):
+    model = Todo
 
+    def get_success_url(self):
+        return reverse('home_todo')
 
 class CreateTodo(CreateView):
     model = Todo

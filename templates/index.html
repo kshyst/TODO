@@ -17,7 +17,7 @@
             {% for t in todos %}
                 {% if t.checked is True %}
                     <form action="." method="post">
-                        <a class="completed" href="{{ t.get_url }}">
+                        <a class="completed" href="{% url 'update_todo' t.id %}">
                             <input type="checkbox" class="check" checked disabled>{{ t.id }} -  {{ t.name }} -  (Due: {{ t.due_date }} )
                          </a>
                         <a href="{% url 'delete_todo' t.id %}" style="color: darkred">
@@ -29,7 +29,7 @@
                         <a href="{% url 'update_todo' t.id %}">
                             <input type="checkbox" class="check" disabled>{{ t.id }} -  {{ t.name }} -  (Due: {{ t.due_date }} )
                         </a>
-                        <a href="{% url 'update_todo' t.id %}" style="color: darkred">
+                        <a href="{% url 'delete_todo' t.id %}" style="color: darkred">
                             delete
                         </a>
                     </form>

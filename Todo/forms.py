@@ -22,3 +22,12 @@ class TaskForm(forms.ModelForm):
     checked = forms.BooleanField(required=False , widget=forms.TextInput(attrs={
         'type' : 'checkbox',
     }))
+
+
+class SearchForm(forms.Form):
+    class Meta:
+        fields = ['search_text']
+
+    search_text = forms.CharField(max_length=128 , required=False , widget=forms.TextInput(attrs={
+        'type' : 'search',
+    }))

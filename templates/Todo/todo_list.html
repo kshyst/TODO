@@ -6,6 +6,11 @@
 </head>
     <body>
         <a href="{% url 'create_todo' %}">Create</a>
+        <br>
+        <form method="get" action=".">
+            {{ search }}
+            <input type="submit" value="Search">
+        </form>
         <table>
             {% for object in object_list %}
                 <tr>

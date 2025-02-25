@@ -8,7 +8,6 @@ class TaskForm(forms.ModelForm):
         model = Todo
         fields = ['name' , 'due_date' , 'checked']
 
-
     name = forms.CharField(max_length=128 , widget=forms.TextInput(attrs={
         'type' : 'text',
         'id' : 'taskInput',
@@ -20,4 +19,6 @@ class TaskForm(forms.ModelForm):
         'id' : 'dueDateInput',
     }))
 
-    checked = forms.CharField(widget=forms.CheckboxInput())
+    checked = forms.BooleanField(required=False , widget=forms.TextInput(attrs={
+        'type' : 'checkbox',
+    }))

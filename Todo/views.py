@@ -58,5 +58,4 @@ def create_todo(request):
         else:
             return render(request, 'create.html', context={"form":form})
 
-
     return render(request , 'create.html' , context=context)

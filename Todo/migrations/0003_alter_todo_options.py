@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('Todo', '0002_alter_todo_due_date'),
+        ("Todo", "0002_alter_todo_due_date"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='todo',
-            options={'verbose_name': 'Todo'},
+            name="todo",
+            options={"verbose_name": "Todo"},
         ),
     ]

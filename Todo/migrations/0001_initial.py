@@ -4,24 +4,30 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Todo',
+            name="Todo",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(default='Unnamed Task', max_length=128)),
-                ('checked', models.BooleanField(default=False)),
-                ('due_date', models.DateField(default='2000/01/01')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(default="Unnamed Task", max_length=128)),
+                ("checked", models.BooleanField(default=False)),
+                ("due_date", models.DateField(default="2000/01/01")),
             ],
             options={
-                'verbose_name': 'Todo',
-                'verbose_name_plural': 'Todo List',
+                "verbose_name": "Todo",
+                "verbose_name_plural": "Todo List",
             },
         ),
     ]

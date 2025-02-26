@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.db.models import Q
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.common import no_append_slash
 from django.views.decorators.http import require_http_methods, require_safe
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
 
@@ -13,6 +13,7 @@ from Todo.models import Todo
 
 
 # Create your views here.
+
 
 @require_http_methods(["GET"])
 @require_safe
@@ -55,6 +56,7 @@ class RetrieveTodo(ListView):
             context["search"] = s
         return context
 
+
 class UpdateTodo(UpdateView):
     model = Todo
 
@@ -62,8 +64,6 @@ class UpdateTodo(UpdateView):
 
     def get_success_url(self):
         return reverse("home_todo")
-
-    no_append_slash(get_success_url)
 
 
 class DeleteTodo(DeleteView):
@@ -83,3 +83,11 @@ class CreateTodo(CreateView):
     def form_valid(self, form):
         print("form was valid!!!!!")
         return super().form_valid(form)
+
+
+class SignUpTodo(CreateView):
+    model = User
+    fields = ['username' , 'password' , 'email']
+
+    def get_success_url(self):
+        return reverse_lazy("home_todo")

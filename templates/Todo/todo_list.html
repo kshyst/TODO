@@ -30,6 +30,7 @@
                     <th>{{ object.due_date }}</th>
                     <th>{{ object.checked }}</th>
                     <th><a href="{% url 'delete_todo' object.id %}" style="color: red">Delete</a></th>
+                    <th><a href="{% url 'share-todo' object.id %}" style="color: lawngreen">Share</a></th>
                 </tr>
             {% endfor %}
         </table>

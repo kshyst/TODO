@@ -1,0 +1,10 @@
+<h2>Sharing {{ task_name }}</h2>
+
+<table>
+    {% for object in users %}
+        <tr>
+            <th>{{ object.username }}</th>
+            <th><a href="{% url 'share-todo-confirm' task_id object.username %}">Share</a></th>
+        </tr>
+    {% endfor %}
+</table>

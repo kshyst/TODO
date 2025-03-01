@@ -93,6 +93,7 @@ class CreateTodo(CreateView):
         form.save_m2m()  # Save many-to-many relationships (users)
         return super().form_valid(form)
 
+
 class SignUpTodo(CreateView):
     model = User
     form_class = RegisterForm

@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.core.validators import MinValueValidator, EmailValidator
+from django.core.validators import EmailValidator
 
 from Todo.models import Todo
 
@@ -40,6 +40,7 @@ class TaskForm(forms.ModelForm):
             }
         ),
     )
+
 
 
 def search_validation(value):
@@ -91,4 +92,6 @@ class RegisterForm(UserCreationForm):
 
 
 class LoginForm(AuthenticationForm):
-    pass
+
+    class Meta:
+        model = User

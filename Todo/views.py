@@ -1,9 +1,7 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Q
 from django.urls import reverse, reverse_lazy
-from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
 
 from Todo.forms import TaskForm, SearchForm, RegisterForm, LoginForm
@@ -46,6 +44,9 @@ class RetrieveTodo(ListView):
             if search_text and search_text != " ":
                 queryset = queryset.filter(Q(name__icontains=search_text))
 
+        for o in Todo.objects.all():
+            print(o.users)
+
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -83,9 +84,14 @@ class CreateTodo(CreateView):
         return reverse("home_todo")
 
     def form_valid(self, form):
-        print("form was valid!!!!!")
+        task = form.save(commit=False)
+        task.save()  # Save the task first
+        task.users.clear()
+        task.users.add(self.request.user)
+        task.save()  # Save the task first
+        print(self.request.user)
+        form.save_m2m()  # Save many-to-many relationships (users)
         return super().form_valid(form)
-
 
 class SignUpTodo(CreateView):
     model = User

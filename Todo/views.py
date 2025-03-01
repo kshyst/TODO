@@ -7,24 +7,6 @@ from django.views.generic import CreateView, ListView, DeleteView, UpdateView
 from Todo.forms import TaskForm, SearchForm, RegisterForm, LoginForm
 from Todo.models import Todo
 
-
-# Create your views here.
-
-
-# @require_http_methods(["GET"])
-# @require_safe
-# class TodoIndex(View):
-#     def get(self, request):
-#         return render(
-#             request,
-#             "",
-#             context={
-#                 "todos": Todo.objects.all(),
-#                 "form": TaskForm(),
-#             },
-#         )
-
-
 #@method_decorator(login_required, name="dispatch")
 class RetrieveTodo(ListView):
     model = Todo
@@ -37,15 +19,15 @@ class RetrieveTodo(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+
+        queryset = queryset.filter(Q(users__username=self.request.user.username))
+
         search_form = SearchForm(self.request.GET)
 
         if search_form.is_valid():
             search_text = search_form.cleaned_data.get("search_text")
             if search_text and search_text != " ":
                 queryset = queryset.filter(Q(name__icontains=search_text))
-
-        for o in Todo.objects.all():
-            print(o.users)
 
         return queryset
 
@@ -86,11 +68,8 @@ class CreateTodo(CreateView):
     def form_valid(self, form):
         task = form.save(commit=False)
         task.save()  # Save the task first
-        task.users.clear()
-        task.users.add(self.request.user)
-        task.save()  # Save the task first
-        print(self.request.user)
-        form.save_m2m()  # Save many-to-many relationships (users)
+        task.users.clear()  # Remove any existing relationships
+        task.users.add(self.request.user)  # Assign the user
         return super().form_valid(form)
 
 

@@ -7,8 +7,18 @@
     <body>
         <a href="{% url 'create_todo' %}">Create</a>
         <br>
-        <a href="{% url 'signup_todo' %}">Sign Up</a>
         <br>
+        {% if username %}
+            <b>You are Logged in as {{ username }}</b>
+            <br>
+            <a href="{% url 'logout_todo' %}">Logout</a>
+            <br>
+        {% else %}
+            <a href="{% url 'signup_todo' %}">Sign Up</a>
+            <br>
+            <a href="{% url 'login_todo' %}">Login</a>
+            <br>
+        {% endif %}
         <form method="get" action=".">
             {{ search }}
             <input type="submit" value="Search">

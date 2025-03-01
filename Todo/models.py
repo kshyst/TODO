@@ -1,5 +1,8 @@
+from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import ManyToManyField
+
 
 # Create your models here.
 
@@ -18,3 +21,9 @@ class Todo(models.Model):
 
     class Meta:
         verbose_name = "Todo"
+
+
+class TodoUser(AbstractUser):
+    tasks = ManyToManyField(
+        to=Todo,
+    )

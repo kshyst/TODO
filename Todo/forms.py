@@ -1,5 +1,8 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, EmailValidator
 
 from Todo.models import Todo
 
@@ -58,3 +61,34 @@ class SearchForm(forms.Form):
             }
         ),
     )
+
+
+class RegisterForm(UserCreationForm):
+    username = forms.CharField(
+        required=True,
+        max_length=128,
+        widget=forms.TextInput(attrs={"type": "text"}),
+    )
+
+    password1 = forms.CharField(
+        required=True,
+        max_length=128,
+        widget=forms.PasswordInput(attrs={"type": "password"}),
+    )
+
+    email = forms.EmailField(
+        required=True,
+        max_length=128,
+        validators=[EmailValidator],
+        widget=forms.EmailInput(attrs={"type": "email"})
+    )
+
+    password2 = None
+
+    class Meta:
+        model = User
+        fields = ["username", "email", "password1"]
+
+
+class LoginForm(AuthenticationForm):
+    pass

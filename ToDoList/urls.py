@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from Todo.views import CreateTodo, RetrieveTodo, DeleteTodo, UpdateTodo, SignUpTodo
+from Todo.views import CreateTodo, RetrieveTodo, DeleteTodo, UpdateTodo, SignUpTodo, LoginTodo, LogoutTodo
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -28,4 +28,6 @@ urlpatterns = [
     path("<pk>/delete/", view=DeleteTodo.as_view(), name="delete_todo"),
     path("create/", view=CreateTodo.as_view(), name="create_todo"),
     path("signup/", view=SignUpTodo.as_view(), name="signup_todo"),
+    path("login/", view=LoginTodo.as_view(), name="login_todo"),
+    path("logout/", view=LogoutTodo.as_view(), name="logout_todo"),
 ]

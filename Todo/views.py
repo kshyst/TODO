@@ -1,35 +1,33 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Q
-from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views import View
-from django.views.decorators.http import require_http_methods, require_safe
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
 
-from Todo.forms import TaskForm, SearchForm
+from Todo.forms import TaskForm, SearchForm, RegisterForm, LoginForm
 from Todo.models import Todo
 
 
 # Create your views here.
 
 
-@require_http_methods(["GET"])
-@require_safe
-class TodoIndex(View):
-    def get(self, request):
-        return render(
-            request,
-            "index.html",
-            context={
-                "todos": Todo.objects.all(),
-                "form": TaskForm(),
-            },
-        )
+# @require_http_methods(["GET"])
+# @require_safe
+# class TodoIndex(View):
+#     def get(self, request):
+#         return render(
+#             request,
+#             "",
+#             context={
+#                 "todos": Todo.objects.all(),
+#                 "form": TaskForm(),
+#             },
+#         )
 
 
-@method_decorator(login_required, name="dispatch")
+#@method_decorator(login_required, name="dispatch")
 class RetrieveTodo(ListView):
     model = Todo
     ordering = "due_date"
@@ -54,6 +52,10 @@ class RetrieveTodo(ListView):
         context = super().get_context_data(**kwargs)
         if s := SearchForm(self.request.GET):
             context["search"] = s
+
+        if self.request.user.is_authenticated:
+            context["username"] = self.request.user.username
+
         return context
 
 
@@ -87,7 +89,22 @@ class CreateTodo(CreateView):
 
 class SignUpTodo(CreateView):
     model = User
-    fields = ['username' , 'password' , 'email']
+    form_class = RegisterForm
 
     def get_success_url(self):
+        return reverse_lazy("home_todo")
+
+class LoginTodo(LoginView):
+    form_class = LoginForm
+    template_name = 'auth/user_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy("home_todo")
+
+class LogoutTodo(LogoutView):
+
+    def get_success_url(self):
+        return reverse_lazy("home_todo")
+
+    def get_redirect_url(self):
         return reverse_lazy("home_todo")

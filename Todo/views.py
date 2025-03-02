@@ -34,6 +34,7 @@ class RetrieveTodo(ListView):
             if search_text and search_text != " ":
                 queryset = queryset.filter(Q(name__icontains=search_text))
 
+
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -119,6 +120,11 @@ class ShareTodoConfirm(View):
 
     def get(self, request , pk , username):
 
-        Todo.objects.get(id = int(pk)).users.add(User.objects.get(username__exact=username))
+        selected_todo = Todo.objects.get(id = int(pk))
+
+        if self.request.user not in selected_todo.users.all():
+            return redirect("share-todo" , pk ,)
+
+        selected_todo.users.add(User.objects.get(username__exact=username))
 
         return redirect("home_todo")

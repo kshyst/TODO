@@ -42,7 +42,6 @@ class TaskForm(forms.ModelForm):
     )
 
 
-
 def search_validation(value):
     if len(value) < 3:
         raise ValidationError(message="Search Query Must Be Longer Than 3 Characters")
@@ -81,7 +80,7 @@ class RegisterForm(UserCreationForm):
         required=True,
         max_length=128,
         validators=[EmailValidator],
-        widget=forms.EmailInput(attrs={"type": "email"})
+        widget=forms.EmailInput(attrs={"type": "email"}),
     )
 
     password2 = None
@@ -92,6 +91,5 @@ class RegisterForm(UserCreationForm):
 
 
 class LoginForm(AuthenticationForm):
-
     class Meta:
         model = User

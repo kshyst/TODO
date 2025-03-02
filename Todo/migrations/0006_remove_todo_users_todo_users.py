@@ -5,20 +5,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('Todo', '0005_todo_users'),
+        ("Todo", "0005_todo_users"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='todo',
-            name='users',
+            model_name="todo",
+            name="users",
         ),
         migrations.AddField(
-            model_name='todo',
-            name='users',
+            model_name="todo",
+            name="users",
             field=models.ManyToManyField(to=settings.AUTH_USER_MODEL),
         ),
     ]

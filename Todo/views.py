@@ -12,7 +12,8 @@ from django.views import View
 from Todo.forms import TaskForm, SearchForm, RegisterForm, LoginForm
 from Todo.models import Todo
 
-#@method_decorator(login_required, name="dispatch")
+
+# @method_decorator(login_required, name="dispatch")
 class RetrieveTodo(ListView):
     model = Todo
     ordering = "due_date"
@@ -33,7 +34,6 @@ class RetrieveTodo(ListView):
             search_text = search_form.cleaned_data.get("search_text")
             if search_text and search_text != " ":
                 queryset = queryset.filter(Q(name__icontains=search_text))
-
 
         return queryset
 
@@ -86,44 +86,51 @@ class SignUpTodo(CreateView):
     def get_success_url(self):
         return reverse_lazy("home_todo")
 
+
 class LoginTodo(LoginView):
     form_class = LoginForm
-    template_name = 'auth/user_form.html'
+    template_name = "auth/user_form.html"
 
     def get_success_url(self):
         return reverse_lazy("home_todo")
 
-class LogoutTodo(LogoutView):
 
+class LogoutTodo(LogoutView):
     def get_success_url(self):
         return reverse_lazy("home_todo")
 
     def get_redirect_url(self):
         return reverse_lazy("home_todo")
 
+
 class ShareTodo(ListView):
     model = User
     ordering = "username"
     template_name = "Todo/todo_list_share.html"
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['users'] = User.objects.all().exclude(username__exact=self.request.user.username)
-        url = self.request.path.split('/')
-        context['task_name'] = Todo.objects.all().filter(id = int(url[len(url) - 1]))[0].name
-        context['task_id'] = int(url[len(url) - 1])
+        context["users"] = User.objects.all().exclude(
+            username__exact=self.request.user.username
+        )
+        url = self.request.path.split("/")
+        context["task_name"] = (
+            Todo.objects.all().filter(id=int(url[len(url) - 1]))[0].name
+        )
+        context["task_id"] = int(url[len(url) - 1])
         return context
+
 
 @method_decorator(login_required, name="get")
 class ShareTodoConfirm(View):
-
-    def get(self, request , pk , username):
-
-        selected_todo = Todo.objects.get(id = int(pk))
+    def get(self, request, pk, username):
+        selected_todo = Todo.objects.get(id=int(pk))
 
         if self.request.user not in selected_todo.users.all():
-            return redirect("share-todo" , pk ,)
+            return redirect(
+                "share-todo",
+                pk,
+            )
 
         selected_todo.users.add(User.objects.get(username__exact=username))
 

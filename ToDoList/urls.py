@@ -18,8 +18,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from Todo.views import CreateTodo, RetrieveTodo, DeleteTodo, UpdateTodo, SignUpTodo, LoginTodo, LogoutTodo, ShareTodo, \
-    ShareTodoConfirm
+from Todo.views import (
+    CreateTodo,
+    RetrieveTodo,
+    DeleteTodo,
+    UpdateTodo,
+    SignUpTodo,
+    LoginTodo,
+    LogoutTodo,
+    ShareTodo,
+    ShareTodoConfirm,
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -32,5 +41,9 @@ urlpatterns = [
     path("login/", view=LoginTodo.as_view(), name="login_todo"),
     path("logout/", view=LogoutTodo.as_view(), name="logout_todo"),
     path("share/<pk>", view=ShareTodo.as_view(), name="share-todo"),
-    path("share/<pk>/<username>", view=ShareTodoConfirm.as_view(), name="share-todo-confirm"),
+    path(
+        "share/<pk>/<username>",
+        view=ShareTodoConfirm.as_view(),
+        name="share-todo-confirm",
+    ),
 ]

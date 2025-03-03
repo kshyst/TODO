@@ -1,3 +1,5 @@
+<h1>{{ menu_name }}</h1>
+
 <form method="post" action=".">
     {% csrf_token %}
     {% for field in form %}
@@ -8,4 +10,8 @@
         {% endif %}
     {% endfor %}
     <input type="submit" value="Create">
+    <br>
+    <br>
+    <br>
+    <a href="{% url 'home_todo' %}">Main Menu</a>
 </form>

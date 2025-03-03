@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Q
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
@@ -13,15 +13,10 @@ from Todo.forms import TaskForm, SearchForm, RegisterForm, LoginForm
 from Todo.models import Todo
 
 
-# @method_decorator(login_required, name="dispatch")
 class RetrieveTodo(ListView):
     model = Todo
     ordering = "due_date"
-
-    # def get(self, request, *args, **kwargs):
-    #     print(request.GET.keys().__str__())
-    #
-    #     return super().get(request , *args , **kwargs)
+    login_url = reverse_lazy("home_todo")
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -48,34 +43,54 @@ class RetrieveTodo(ListView):
         return context
 
 
+@method_decorator([login_required(login_url=reverse_lazy("login_todo"))], "get")
+@method_decorator([login_required(login_url=reverse_lazy("login_todo"))], "post")
 class UpdateTodo(UpdateView):
     model = Todo
 
     fields = ["name", "due_date", "checked"]
 
+    def post(self, request, *args, **kwargs):
+        pk = int(kwargs.get('pk'))
+        if not Todo.objects.get(pk = pk).users.contains(request.user):
+            self.object = self.get_object()
+            return self.form_invalid(self.get_form())
+
+        return super().post(request , *args , **kwargs)
+
     def get_success_url(self):
         return reverse("home_todo")
 
 
-class DeleteTodo(DeleteView):
+class DeleteTodo(LoginRequiredMixin ,DeleteView):
     model = Todo
+    login_url = reverse_lazy("login_todo")
+
+    def post(self, request, *args, **kwargs):
+        pk = int(kwargs.get('pk'))
+        if not Todo.objects.get(pk = pk).users.contains(request.user):
+            self.object = self.get_object()
+            return self.form_invalid(self.get_form())
+
+        return super().post(request , *args , **kwargs)
 
     def get_success_url(self):
         return reverse_lazy("home_todo")
 
 
-class CreateTodo(CreateView):
+class CreateTodo(LoginRequiredMixin, CreateView):
     model = Todo
     form_class = TaskForm
+    login_url = reverse_lazy("login_todo")
 
     def get_success_url(self):
         return reverse("home_todo")
 
     def form_valid(self, form):
         task = form.save(commit=False)
-        task.save()  # Save the task first
-        task.users.clear()  # Remove any existing relationships
-        task.users.add(self.request.user)  # Assign the user
+        task.save()
+        task.users.clear()
+        task.users.add(self.request.user)
         return super().form_valid(form)
 
 
@@ -86,6 +101,12 @@ class SignUpTodo(CreateView):
     def get_success_url(self):
         return reverse_lazy("home_todo")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context["menu_name"] = "Signup Menu"
+
+        return context
+
 
 class LoginTodo(LoginView):
     form_class = LoginForm
@@ -93,6 +114,12 @@ class LoginTodo(LoginView):
 
     def get_success_url(self):
         return reverse_lazy("home_todo")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context["menu_name"] = "Login Menu"
+
+        return context
 
 
 class LogoutTodo(LogoutView):
@@ -121,8 +148,9 @@ class ShareTodo(ListView):
         return context
 
 
-@method_decorator(login_required, name="get")
-class ShareTodoConfirm(View):
+class ShareTodoConfirm(LoginRequiredMixin ,View):
+    login_url = reverse_lazy('login_todo')
+
     def get(self, request, pk, username):
         selected_todo = Todo.objects.get(id=int(pk))
 

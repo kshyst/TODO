@@ -5,20 +5,22 @@
     <title>Retrieve</title>
 </head>
     <body>
-        <a href="{% url 'create_todo' %}">Create</a>
-        <br>
-        <br>
-        {% if username %}
-            <b>You are Logged in as {{ username }}</b>
+        <nav>
+            <a href="{% url 'create_todo' %}">Create Task</a>
             <br>
-            <a href="{% url 'logout_todo' %}">Logout</a>
-            <br>
-        {% else %}
-            <a href="{% url 'signup_todo' %}">Sign Up</a>
-            <br>
-            <a href="{% url 'login_todo' %}">Login</a>
-            <br>
-        {% endif %}
+            {% if username %}
+                <b>You are Logged in as {{ username }}</b>
+                <br>
+                <a href="{% url 'logout_todo' %}">Logout</a>
+                <br>
+            {% else %}
+                <a href="{% url 'signup_todo' %}">Sign Up</a>
+                <br>
+                <a href="{% url 'login_todo' %}">Login</a>
+                <br>
+            {% endif %}
+        </nav>
+
         <form method="get" action=".">
             {{ search }}
             <input type="submit" value="Search">

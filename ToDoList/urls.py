@@ -31,7 +31,7 @@ from Todo.views import (
 )
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("admin/", admin.site.urls, name="admin_todo"),
     path("", view=RetrieveTodo.as_view(), name="home_todo"),
     path("update/<int:pk>/", view=UpdateTodo.as_view(), name="update_todo"),
     # path("delete/<int:id>/" , view=delete_todo , name="delete_todo"),

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.admin",
     "Todo.apps.TodoConfig",
     "Todo.templatetags.form_filters",
+    "rest_framework"
 ]
 
 MIDDLEWARE = [

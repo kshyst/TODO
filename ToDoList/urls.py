@@ -16,7 +16,8 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
 
 from Todo.views import (
     CreateTodo,
@@ -27,11 +28,16 @@ from Todo.views import (
     LoginTodo,
     LogoutTodo,
     ShareTodo,
-    ShareTodoConfirm,
+    ShareTodoConfirm, UserViewSet, show_todo_list,
 )
 
+router = routers.DefaultRouter()
+router.register(r'users' , UserViewSet)
 urlpatterns = [
     path("admin/", admin.site.urls, name="admin_todo"),
+    path('api-path/' , include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('todos/' , show_todo_list , name='todos'),
     path("", view=RetrieveTodo.as_view(), name="home_todo"),
     path("update/<int:pk>/", view=UpdateTodo.as_view(), name="update_todo"),
     # path("delete/<int:id>/" , view=delete_todo , name="delete_todo"),

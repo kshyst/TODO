@@ -3,14 +3,22 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
 from django.views import View
+from rest_framework import viewsets, permissions, authentication
+from rest_framework.decorators import api_view
+from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from Todo.forms import TaskForm, SearchForm, RegisterForm, LoginForm
 from Todo.models import Todo
+from Todo.serializers import UserSerializer, TodoSerializer
 
 
 class RetrieveTodo(ListView):
@@ -163,3 +171,29 @@ class ShareTodoConfirm(LoginRequiredMixin ,View):
         selected_todo.users.add(User.objects.get(username__exact=username))
 
         return redirect("home_todo")
+
+"""
+API Views
+"""
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+@csrf_exempt
+def show_todo_list(request):
+    if request.method == "GET":
+        todos = Todo.objects.all()
+        serializer = TodoSerializer(todos, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    elif request.method == "POST":
+        data = JSONParser().parse(request)
+        serializer = TodoSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+
